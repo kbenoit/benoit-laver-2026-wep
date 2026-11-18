@@ -44,7 +44,7 @@ The heading of the first column of Table 4 identifies the comparison as ‘Budge
 
 Two decisions in the original code affected the MP weights. First, both MP immigration categories (601.2 and 602.2) are missing for every one of the 63 manifestos that we could match to the 72 with complete expert scores. Summing the two missing values with `na.rm = TRUE` assigned each manifesto an immigration score of zero. The two correlations involving MP immigration in Table 4 are therefore unavailable. The published Figure 2 plotted these zeros as if we had observed them. The corrected figure shows the expert and LLM distributions for immigration and marks the MP series as unavailable.
 
-Second, we included category 604 in the numerator for social policy but omitted it from the denominator of the MP budget. The resulting budgets exceeded one for 32 of the 63 manifestos, reaching 1.068. We now sum the observed issue totals to form the denominator, counting category 604 wherever it contributes to the social-policy total. For these 63 manifestos the MP weights sum to one over five observed issues. The expert and LLM weights retain their original budgets.
+Second, we included category 604 in the numerator for social policy but omitted it from the denominator of the MP budget. As a result, the six MP weights summed to more than one for 32 of the 63 manifestos, reaching 1.068. We now sum the observed issue totals to form the denominator, counting category 604 wherever it contributes to the social-policy total. For these 63 manifestos the MP weights sum to one over five observed issues. The expert and LLM weights retain their original budgets.
 
 ### Corrected Table 4
 
