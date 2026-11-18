@@ -12,7 +12,7 @@ library("ggplot2")
 source("00_setup.R")   # data and shared objects
 
 fig2_df <- expert_budget_df |>
-  filter(if_all(all_of(paste0("mp_", dims6, "_budget")), ~ !is.na(.x)))
+  semi_join(mp_df, by = "manifesto")
 cat("Manifestos plotted:", nrow(fig2_df), "\n")
 
 fig2_long <- fig2_df |>
@@ -36,8 +36,8 @@ fig2_long <- fig2_df |>
 dim_order <- fig2_long |>
   filter(measure_type == "MP Budget") |>
   group_by(dimension) |>
-  summarise(med = median(budget_value), .groups = "drop") |>
-  arrange(med) |>
+  summarise(med = median(budget_value, na.rm = TRUE), .groups = "drop") |>
+  arrange(desc(is.na(med)), med) |>
   pull(dimension)
 fig2_long <- fig2_long |>
   mutate(dimension = factor(dim_label(dimension), levels = dim_label(dim_order)))
@@ -47,10 +47,11 @@ fig2_colours <- c("Expert Budget" = "#0073C2",
                   "MP Budget"     = "#EFC000",
                   "LLM Budget"    = "#868686")
 
-figure_2 <- ggplot(fig2_long, aes(x = dimension, y = budget_value, fill = measure_type)) +
+figure_2 <- ggplot(filter(fig2_long, !is.na(budget_value)), aes(x = dimension, y = budget_value, fill = measure_type)) +
   geom_boxplot(alpha = 0.7, outlier.alpha = 0.5, position = position_dodge(width = 0.8)) +
   scale_fill_manual(values = fig2_colours) +
-  labs(x = "Policy Dimension", y = "Budget Score (0-1.0)", fill = "Measure Type") +
+  labs(x = "Policy Dimension", y = "Budget Score (0-1.0)", fill = "Measure Type",
+       caption = "MP immigration scores are unavailable for all 63 matched manifestos.") +
   coord_flip() +
   theme_minimal()
 

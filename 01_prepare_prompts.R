@@ -18,6 +18,10 @@ dimensions_control <- dimensions$control
 library(glue)
 library(purrr)
 
+# Seeds from the August 2025 run, shared by the full scorer and the pilot.
+score_seeds <- c(interval = 20250816L, ranked = 20250813L,
+                 pairwise = 20250813L, budget = 20250813L)
+
 # Issue dimensions ----
 
 # Choose only the core six dimensions plus planetary defence as a control

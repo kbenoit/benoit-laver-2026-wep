@@ -36,7 +36,7 @@ The saved LLM responses should therefore be treated as **given data**, in the sa
 ```
 ├── README.md                     this file
 ├── LICENSE                       CC BY 4.0
-├── ERRATA.md                     two errors in the published results, and their corrections
+├── ERRATA.md                     corrections to Tables 3 and 4 and Figure 2
 ├── run_all.R                     runs every analysis script in order
 │
 ├── 00_setup.R                    shared setup, sourced by every table and figure script
@@ -44,6 +44,7 @@ The saved LLM responses should therefore be treated as **given data**, in the sa
 │
 ├── 01_prepare_prompts.R          stage 1: the system prompts and output formats
 ├── 02_score_manifestos_gemini.R  stage 1: LLM scoring (not run by run_all.R)
+├── pilot_gemini.R                controlled six-manifesto scoring pilot
 ├── 03_check_published_scores.R   checks the published scores file against the raw responses
 │
 ├── Figure_1.R  Table_1.R  Table_2.R  Table_3.R  Figure_2.R  Table_4.R
@@ -82,8 +83,8 @@ The saved LLM responses should therefore be treated as **given data**, in the sa
 | `Table_1.R` | Table 1, plus corpus statistics quoted in the text | `Table_1.csv` |
 | `Table_2.R` | Table 2 | `Table_2.csv` |
 | `Table_3.R` | Table 3, plus a corrected Plackett–Luce column | `Table_3.csv` |
-| `Figure_2.R` | Figure 2 | `Figure_2.pdf` |
-| `Table_4.R` | Table 4, with the first column correctly labelled and the corrected MP v expert column added | `Table_4.csv` |
+| `Figure_2.R` | Corrected Figure 2, showing available MP observations | `Figure_2.pdf` |
+| `Table_4.R` | Table 4, with the LLM–expert column correctly labelled and both MP comparisons computed from the corrected budgets | `Table_4.csv` |
 | `Text_party_groups.R` | Green and far-right party comparisons discussed in the text (p. 13) | `Text_party_groups.csv` |
 | `Table_A1.R` | Online Appendix Table A.1 | `Table_A1.csv` |
 | `Table_B1.R` | Online Appendix Table B.1 | `Table_B1.csv` |
@@ -120,18 +121,60 @@ The script uses quallmer with the same model, seeds and temperature (0) as the o
 
 The new responses are written to `data/llm_responses_rerun/`, in the same format as `data/llm_responses/`, so the archived data are never overwritten. To analyse them, change `llm_dir` near the top of `00_setup.R` to `"data/llm_responses_rerun"`. To try the pipeline cheaply first, two environment variables override the defaults: `SALIENCE_MODEL` (for example `"ollama/llama3.2"` for a local model) and `SALIENCE_N_DOCS` (the number of manifestos to score).
 
+### Six-manifesto Gemini pilot
+
+The pilot runs this repository’s `02_score_manifestos_gemini.R` twice, in separate R sessions. Both passes use its quallmer/ellmer calls, structured outputs, retry settings, temperature and per-prompt seeds. Each pass scores the same six full manifestos with the four study prompts. The fixed IDs in `data/pilot_manifestos.txt` cover six languages and lengths of 559 to 57,301 corpus tokens. The Belgian, Hungarian and British manifestos had misassigned PL worths in the published analysis.
+
+**Pilot results (18 November 2026).** Both passes returned valid scores for all six manifestos on all four prompts. On the budgeted measure, the average difference between passes was 1.57 percentage points per issue, compared with 2.19 and 1.76 points when we compared each pass with the August 2025 archive.
+
+| Measure | Pass 1 vs pass 2 | Pass 1 vs archive | Pass 2 vs archive |
+|---|---:|---:|---:|
+| Budget, mean absolute difference (percentage points) | 1.57 | 2.19 | 1.76 |
+| Interval, mean absolute difference (0–10 scale) | 0.21 | 0.19 | 0.21 |
+| Rank, mean within-manifesto Spearman correlation | 0.988 | 0.982 | 0.970 |
+| Pairwise, share of winners agreeing | 94.4% | 93.7% | 92.9% |
+
+Individual Plackett–Luce worths were more sensitive to changes in pairwise judgements. For Portugal’s Left Bloc, pass 2 agreed with the archive on 19 of 21 pairs. Both reversals involved the environment, whose estimated worth fell from 0.631 in the archive to 0.089 in pass 2.
+
+From the repository root, use the normal R session with the Gemini credentials described above. The pilot also requires the CRAN package `filelock`. A fresh run makes 48 billable calls before retries, requests `google_gemini/gemini-2.5-pro`, and then compares the exported scores with the archive.
+
+In an interactive RStudio session, sourcing the driver starts or resumes both passes. Use `chdir = TRUE` to resolve the data and scoring script relative to the driver.
+
+```r
+source("pilot_gemini.R", chdir = TRUE)
+```
+
+From a terminal, choose an offline preview or the live run explicitly.
+
+```sh
+Rscript pilot_gemini.R --plan
+Rscript pilot_gemini.R --run
+```
+
+To run one pass at a time, these are the same scorer invocations used by the driver:
+
+```sh
+Rscript 02_score_manifestos_gemini.R --pilot-pass=1
+Rscript 02_score_manifestos_gemini.R --pilot-pass=2
+Rscript pilot_gemini.R --compare
+```
+
+Each pass writes the scorer’s four response tables and quallmer objects to its own directory under `data/llm_responses_rerun/six_manifesto_pilot_02/`. Repeating the command reuses saved prompt batches. Each protocol records the requested model, package versions and input checksums. Model availability and alias routing depend on the account and date. [Google’s model availability schedule](https://ai.google.dev/gemini-api/docs/deprecations)
+
+The comparison reads interval, ranked, pairwise and budget responses from `data/llm_responses/`, aligning the six new rows to the corpus by manifesto ID and the issues or pairs by field name. Open `summary.csv` in the pilot directory for the two archive comparisons and between-pass agreement. Interval and budget results are mean absolute differences in their original units (zero is exact agreement). Ranked results are within-manifesto Spearman correlations across the seven issues. Pairwise results are the fraction of the 21 winners that agree. Values of one indicate exact agreement for both ordinal measures. Each summary averages over manifestos and gives the number contributing out of six. `agreement.csv` gives those measures by manifesto and flags incomplete or invalid scores, which are excluded from the affected comparisons. `scores.csv` puts the archived value and both new values side by side for every issue or pair. Use `--compare` to regenerate the reports offline.
+
 ## Notes on correspondence with the published article
 
-**Two errors in the published results are documented in [ERRATA.md](ERRATA.md):** misassigned Plackett–Luce scores in Table 3, and a mislabelled column in Table 4. The scripts reproduce the published values and report the corrected values alongside them.
+[ERRATA.md](ERRATA.md) documents the PL row order in Table 3, the copied column in Table 4, and the MP weights used in Table 4 and Figure 2. The earlier replication snapshot linked there preserves the original MP results.
 
 1. **Rounding (Tables 3 and 4).** The scripts report three decimals. The published tables were rounded by hand to two decimals from these three-decimal values. In three cells this double rounding differs by 0.01 from rounding the exact value directly:
    * Table 3 Fisher z-average, unbudgeted: 0.424 → published 0.43
    * Table 3 Social, Plackett–Luce: 0.095 (exactly 0.0948) → published 0.10
    * Table 3/Table 4 EU, budgeted expert v LLM: 0.495 (exactly 0.4947) → published 0.50
 
-   The 0.43 also reflects the original code, which computed the Fisher average from correlations already rounded to three decimals (0.425 rather than 0.424). Every other value matches exactly.
-2. **Immigration in Table 4.** The MP immigration categories (601.2, 602.2) are zero for every manifesto in the n = 63 overlap sample, so the correlation is undefined (NA), as published.
-3. **Figure 2** uses the 63 manifestos that have expert importance scores on all six issues and a Manifesto Project record.
+   The 0.43 also reflects the original code, which computed the Fisher average from correlations already rounded to three decimals (0.425 rather than 0.424).
+2. **Immigration in Table 4.** Both MP immigration categories are missing for all 63 matched manifestos. Each MP comparison has 63 observations on five issues and zero on immigration. The original LLM–expert column uses 72 manifestos on all six issues.
+3. **Figure 2** uses the same 63 matched manifestos. The MP series covers five observed issues, with category 604 included in the MP budget denominator. The figure also shows the expert and LLM immigration distributions.
 4. **Appendix D.** The appendix text describes the sample as manifestos "for which at least three dimensions were scored by the experts". In practice the computation requires expert scores on all six dimensions, giving 72 manifestos, or 18 per quartile, as stated in the Table D.1 caption.
 5. **Figure 1** is a conceptual diagram. The published version was drawn by hand; `Figure_1.R` recreates it.
 

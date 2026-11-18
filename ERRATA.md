@@ -2,7 +2,7 @@
 
 Benoit, Kenneth and Michael Laver (2026). "Measuring issue salience for political parties using LLMs." *West European Politics*. <https://doi.org/10.1080/01402382.2026.2637134>
 
-While preparing these replication materials we found two errors in the published results. Both come from the code that assembled results for the tables. Neither affects the LLM scoring itself, the data, or the article's main conclusion: the budgeted LLM measure is the best of the four LLM measures, with a Fisher z-average correlation of 0.48 with the raw expert scores and 0.63 with the budgeted expert scores. The replication scripts reproduce the published values and report the corrected values alongside them.
+While preparing these replication materials we found errors in the assembly of Tables 3 and 4 and in the construction of the Manifesto Project (MP) salience budgets used in Table 4 and Figure 2. The corrections use the archived LLM responses. The budgeted LLM measure has the highest Fisher z-average correlation of the four LLM measures with the raw expert scores (0.48), rising to 0.63 when we also budget the expert scores.
 
 ## 1. Table 3: Plackett–Luce scores assigned to the wrong manifestos
 
@@ -34,41 +34,42 @@ The article says that the PL correlations "are clearly weaker than for the other
 
 So the pairwise method was not an outlier. The ordering of the methods, with budgeted best, is unchanged. The discussion of why the pairwise method underperformed (pp. 13–14, 16) still applies relative to the budgeted measure, but not relative to the unbudgeted and rank measures. As in the published table, the PL correlations remain highest for environment and immigration.
 
-## 2. Table 4: first column mislabelled
+## 2. Table 4 and Figure 2
 
-### What went wrong
+### The first column of Table 4
 
-The first column of Table 4 is headed "Budgeted MP-budgeted expert (n=72)". It is meant to show how closely the Manifesto Project (MP) budget measures correlate with the budgeted expert scores. The values printed there (0.68, 0.24, 0.81, 0.77, 0.50, 0.60; Fisher z-average 0.63) are in fact the correlations between the **budgeted LLM** scores and the budgeted expert scores. They are identical to the last column of Table 3. When the code assembled Table 4, it picked up the wrong set of correlations and labelled them as MP-v-expert.
+The heading of the first column of Table 4 identifies the comparison as ‘Budgeted MP-budgeted expert (n = 72)’. In assembling the table we copied the last column of Table 3, which gives the correlations between budgeted LLM and expert scores for the 72 manifestos with complete expert scores. The values are valid for that comparison. The revised table retains the column under its correct heading, retains the MP–LLM comparison in the second column, and adds the intended MP–expert comparison in the third.
 
-The second column of Table 4 (budgeted MP v budgeted LLM, n = 63) is correct.
+### The MP salience budget
 
-### Corrected values
+Two decisions in the original code affected the MP weights. First, both MP immigration categories (601.2 and 602.2) are missing for every one of the 63 manifestos that we could match to the 72 with complete expert scores. Summing the two missing values with `na.rm = TRUE` assigned each manifesto an immigration score of zero. The two correlations involving MP immigration in Table 4 are therefore unavailable. The published Figure 2 plotted these zeros as if we had observed them. The corrected figure shows the expert and LLM distributions for immigration and marks the MP series as unavailable.
 
-The MP measures exist for 63 of the 72 manifestos with complete expert scores, so the corrected column has n = 63, not 72.
+Second, we included category 604 in the numerator for social policy but omitted it from the denominator of the MP budget. The resulting budgets exceeded one for 32 of the 63 manifestos, reaching 1.068. We now sum the observed issue totals to form the denominator, counting category 604 wherever it contributes to the social-policy total. For these 63 manifestos the MP weights sum to one over five observed issues. The expert and LLM weights retain their original budgets.
 
-| Dimension | Published column (actually LLM v expert, n = 72) | Corrected: MP v expert (n = 63) |
-|---|---|---|
-| Economic | 0.68 | 0.46 |
-| Social | 0.24 | 0.26 |
-| Environment | 0.81 | 0.68 |
-| Immigration | 0.77 | NA |
-| EU | 0.50 | 0.39 |
-| Decentralisation | 0.60 | 0.71 |
-| **Fisher z-average** | **0.63** | **0.52** |
+### Corrected Table 4
 
-The MP immigration categories (601.2, 602.2) are zero for every manifesto in this sample, so that correlation is undefined, and the corrected Fisher z-average is over five dimensions. Over the same five dimensions, the LLM-v-expert z-average is 0.60 on the n = 72 sample and 0.56 on the n = 63 sample with MP data.
+| Dimension | Budgeted LLM v expert (n = 72) | Budgeted MP v LLM (n = 63) | Budgeted MP v expert (n = 63) |
+|---|---:|---:|---:|
+| Economic | 0.681 | 0.488 | 0.444 |
+| Social | 0.238 | −0.060 | 0.263 |
+| Environment | 0.809 | 0.873 | 0.683 |
+| Immigration | 0.770 | NA | NA |
+| EU | 0.495 | 0.627 | 0.383 |
+| Decentralisation | 0.602 | 0.545 | 0.712 |
+| **Fisher z-average** | **0.631** | **0.561** | **0.519** |
+
+The first column averages correlations over six issues. Each MP column averages correlations over the five issues observed for all 63 matched manifestos. For immigration there are zero observed MP pairs.
 
 ### Effect on the text
 
-The article says that "the similar distributions of LLM and MP salience weights are also associated with similar correlations between both LLM (Table 3) and MP estimates and the expert benchmark" (p. 15). With the corrected values the MP measures correlate somewhat **less** well with the experts than the LLM does: 0.52 against 0.56 on the same 63 manifestos and five dimensions. Neither measure is uniformly better. The MP correlates more highly for decentralisation and social policy, and the LLM for economic policy, environment and the EU.
+On p. 15 we describe LLM and MP salience estimates as having similar correlations with the expert benchmark. Comparing the same 63 manifestos and the same five issues, the Fisher z-average is 0.563 for LLM–expert and 0.519 for MP–expert. The MP estimates correlate more highly with expert judgements on social policy and decentralisation, the LLM estimates on economic policy, the environment and the EU. As a further check, we rescaled all three sets of weights to sum to one over the same five issues. The corresponding LLM–expert and MP–expert averages are 0.573 and 0.533. The LLM estimates thus correlate modestly more highly with the experts on average under either budget definition.
 
-The broader argument of this section still holds. The LLM and MP estimates have similar distributions, and both differ from the expert judgements (Figure 2, which is correct). The claim that the two correlate *similarly* with the experts should be softened: the LLM correlates modestly more highly.
+Figure 2 still shows that both manifesto-based measures assign greater salience to economic and social policy than the experts do. The published figure provides no evidence about the distribution of MP immigration salience in this sample.
 
 ## Reproducing the corrections
 
 * `Table_3.R` reports both the published and the corrected PL column.
-* `Table_4.R` reports the published first column under its correct name, and the corrected MP-v-expert correlations.
-* `00_setup.R` re-estimates the PL scores from the archived pairwise responses with `pl_worths()` (in `functions.R`), which keeps each manifesto's scores in its own row.
-* `03_check_published_scores.R` checks that, in the published scores file, the PL scores are misassigned for exactly 45 manifestos and that every other score is identical to the raw responses.
-
-No other table or figure is affected. Figure 2, Tables 1 and 2, and the online appendix tables and figures are all reproduced exactly.
+* `00_setup.R` re-estimates PL worths from the archived comparisons and constructs the MP budgets from the categories listed in Table B.1.
+* `Table_4.R` writes the three comparisons above and prints the matched LLM–expert average and the five-issue sensitivity check.
+* `Figure_2.R` plots the observed distributions for the same 63 manifestos.
+* The [earlier replication snapshot](https://github.com/kbenoit/benoit-laver-2026-wep/tree/c07d227) retains the original MP calculation, Figure 2, and the earlier Table 4 output.

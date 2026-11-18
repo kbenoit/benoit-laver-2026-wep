@@ -124,33 +124,19 @@ mp_cats <- list(
   eu               = c(108, 110),
   decentralization = c(301, 302)
 )
-# The denominator of the budget sums over the categories of all six scales.
-# As in the original analysis, the social scale used in the denominator is
-# the Lowe et al. liberal-conservative scale *without* category 604 (which is
-# added to the social numerator only).
-mp_cats_denominator <- c(
-  c(403, 404, 406, 412, 413, 504, 506, 701, 401, 402, 407, 414, 505),
-  c(103, 105, 106, 107, 202, 104, 201, 203, 305, 601, 603, 605, 606),
-  c(501, 416, 410),
-  c("602_2", "601_2"),
-  c(108, 110),
-  c(301, 302)
-)
-
-mp_budget <- function(data, cats, all_cats) {
-  this_sum <- rowSums(select(data, all_of(paste0("per", cats))), na.rm = TRUE)
-  all_sum  <- rowSums(select(data, all_of(paste0("per", all_cats))), na.rm = TRUE)
-  ifelse(this_sum == 0, 0, this_sum / all_sum)
-}
-
-mp_df <- data_mp |>
-  transmute(
-    manifesto,
-    !!!setNames(
-      lapply(dims6, \(d) mp_budget(data_mp, mp_cats[[d]], mp_cats_denominator)),
-      paste0("mp_", dims6, "_budget")
-    )
-  )
+# Each issue requires its component categories to have been recorded. A recorded
+# zero remains a zero. For each manifesto the denominator is the sum of the
+# observed issue totals, including category 604 in the social total.
+mp_totals <- vapply(mp_cats, function(categories) {
+  rowSums(data_mp[paste0("per", categories)], na.rm = FALSE)
+}, numeric(nrow(data_mp)))
+mp_total <- rowSums(mp_totals, na.rm = TRUE)
+mp_total[mp_total == 0] <- NA_real_
+mp_weights <- mp_totals / mp_total
+colnames(mp_weights) <- paste0("mp_", colnames(mp_weights), "_budget")
+mp_df <- bind_cols(select(data_mp, manifesto), as_tibble(mp_weights))
+stopifnot(!anyDuplicated(mp_df$manifesto),
+          all(abs(rowSums(mp_weights, na.rm = TRUE)[!is.na(mp_total)] - 1) < 1e-10))
 
 # 4. Combined analysis data ----------------------------------------------------
 
