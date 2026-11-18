@@ -29,7 +29,7 @@ The saved LLM responses should therefore be treated as **given data**, in the sa
    source("run_all.R")
    ```
 
-   or step through the scripts in the order of the table below. Each table or figure script runs on its own; it sources `00_setup.R` itself. Results are written to `output/`. A full run takes about a minute.
+   or step through the scripts in the order of the table below. Each table or figure script runs on its own; it sources `00_setup.R` itself. Results are written to `output/`, which already contains the results of a full run for comparison. A full run takes about a minute.
 
 ## Folder structure
 
@@ -54,14 +54,19 @@ The saved LLM responses should therefore be treated as **given data**, in the sa
 │   ├── corpus_manifestos.rds     the 246 manifestos, with expert survey scores
 │   ├── dimensions.rds            issue definitions used in the prompts
 │   ├── manifesto_project.rds     Manifesto Project codings of the same manifestos
-│   └── llm_responses/            the Gemini 2.5 Pro responses (given data)
-│       ├── interval.rds
-│       ├── ranked.rds
-│       ├── pairwise.rds
-│       ├── budget.rds
-│       └── combined_published.rds
+│   ├── llm_responses/            the Gemini 2.5 Pro responses (given data)
+│   │   ├── interval.rds
+│   │   ├── ranked.rds
+│   │   ├── pairwise.rds
+│   │   ├── budget.rds
+│   │   └── combined_published.rds
+│   └── llm_responses_rerun/      created only if you re-run 02_ (not included)
 │
-└── output/                       created by the scripts
+└── output/                       results of a full run of run_all.R
+    ├── Table_1.csv … Table_D1.csv, Text_party_groups.csv
+    ├── Figure_1.pdf, Figure_2.pdf, Figure_D1.pdf
+    ├── Appendix_C_prompts.txt
+    └── sessionInfo.txt           R and package versions used
 ```
 
 ## Scripts
@@ -71,7 +76,7 @@ The saved LLM responses should therefore be treated as **given data**, in the sa
 | `00_setup.R` | Shared setup: loads the data, builds the LLM scores from the raw responses, and computes the MP and expert "budget" measures | — |
 | `functions.R` | Defines `pl_worths()`, used by `00_setup.R` and `03_` | — |
 | `01_prepare_prompts.R` | Builds the four system prompts and the structured output formats | — |
-| `02_score_manifestos_gemini.R` | Sends the manifestos to Gemini 2.5 Pro. **Not run by `run_all.R`**; see below | (`llm_output/`) |
+| `02_score_manifestos_gemini.R` | Sends the manifestos to Gemini 2.5 Pro. **Not run by `run_all.R`**; see below | (`data/llm_responses_rerun/`) |
 | `03_check_published_scores.R` | Confirms that the published scores file matches the raw responses, and identifies the 45 misassigned Plackett–Luce scores (ERRATA.md) | printed |
 | `Figure_1.R` | Figure 1 (conceptual illustration, no data) | `Figure_1.pdf` |
 | `Table_1.R` | Table 1, plus corpus statistics quoted in the text | `Table_1.csv` |
@@ -113,7 +118,7 @@ Each `llm_responses` file has one row per manifesto, in the same order as the co
 
 The script uses quallmer with the same model, seeds and temperature (0) as the original run. A failed request does not stop the batch, and quallmer re-codes failed manifestos automatically. The prompts are sent exactly as written in `01_prepare_prompts.R`. (The original run called ellmer directly through an experimental function; quallmer now provides the same behaviour.)
 
-The new responses are written to `llm_output/`, in the same format as `data/llm_responses/`, so the archived data are never overwritten. To try the pipeline cheaply first, two environment variables override the defaults: `SALIENCE_MODEL` (for example `"ollama/llama3.2"` for a local model) and `SALIENCE_N_DOCS` (the number of manifestos to score).
+The new responses are written to `data/llm_responses_rerun/`, in the same format as `data/llm_responses/`, so the archived data are never overwritten. To analyse them, change `llm_dir` near the top of `00_setup.R` to `"data/llm_responses_rerun"`. To try the pipeline cheaply first, two environment variables override the defaults: `SALIENCE_MODEL` (for example `"ollama/llama3.2"` for a local model) and `SALIENCE_N_DOCS` (the number of manifestos to score).
 
 ## Notes on correspondence with the published article
 
@@ -142,7 +147,3 @@ Some of the data come from other sources and remain subject to their own terms:
 
 * **Manifesto texts and Manifesto Project codings.** The manifesto texts in `data/corpus_manifestos.rds` and the codings in `data/manifesto_project.rds` are processed versions of material from the Manifesto Project (<https://manifesto-project.wzb.eu>). Their use is subject to the [Manifesto Project's Terms of Use](https://manifesto-project.wzb.eu/information/documents/terms_of_use). Please cite the Manifesto Project Dataset and the Manifesto Corpus as the project recommends.
 * **Expert surveys.** The expert position and importance scores come from Laver and Hunt (1992), Benoit and Laver (2006) and the Chapel Hill Expert Survey (Jolly et al. 2022). Please cite these sources when using the scores.
-
-## Depositing
-
-This folder is the complete deposit. Leave out `output/` and `llm_output/`, which the scripts create. Harvard Dataverse keeps the folder structure when the folder is uploaded as a single `.zip` file, so the scripts work unchanged after download.

@@ -61,15 +61,19 @@ dim_label <- function(x) {
 # 2. LLM (Gemini 2.5 Pro) salience scores -------------------------------------
 # The raw LLM responses in data/llm_responses/ are GIVEN DATA: produced once,
 # in August 2025, by 02_score_manifestos_gemini.R, and not exactly repeatable.
+# To analyse a new run of 02_ instead, change llm_dir to
+# "data/llm_responses_rerun". (The published Plackett-Luce column, *_pl, always
+# comes from the archived run.)
 # Each file has one row per manifesto (in corpus order), with the LLM's score
 # and justification for each of the seven dimensions:
 #   interval.rds  unbudgeted cardinal score, 0-10
 #   ranked.rds    rank, 1 (most important) to 7
 #   pairwise.rds  winner and justification for each of the 21 pairs
 #   budget.rds    budgeted score, 0-1, summing to 1
+llm_dir <- file.path("data", "llm_responses")
 raw <- lapply(c(interval = "interval", ranked = "ranked",
                 pairwise = "pairwise", budget = "budget"),
-              \(f) readRDS(file.path("data", "llm_responses", paste0(f, ".rds"))))
+              \(f) readRDS(file.path(llm_dir, paste0(f, ".rds"))))
 stopifnot(all(sapply(raw, nrow) == length(docs)))
 
 scores_from <- function(df, suffix) {

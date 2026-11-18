@@ -1,0 +1,8 @@
+"Dimension","Budgeted expert v budgeted LLM (n=72)","Budgeted MP v budgeted LLM","n (MP v LLM)","Budgeted MP v budgeted expert"
+"Economic",0.681,0.491,63,0.455
+"Social",0.238,-0.068,63,0.261
+"Environment",0.809,0.874,63,0.684
+"Immigration",0.77,NA,63,NA
+"EU",0.495,0.628,63,0.385
+"Decentralization",0.602,0.546,63,0.712
+"Fisher z-average",0.631,0.561,NA,0.522

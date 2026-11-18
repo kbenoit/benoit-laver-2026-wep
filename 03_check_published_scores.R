@@ -11,7 +11,7 @@
 #   - its Plackett-Luce worths are the correct worths of the 246 manifestos,
 #     but attached to the wrong manifesto in 45 cases (see ERRATA.md).
 #
-# To check a new LLM run instead, set raw_dir <- "llm_output".
+# To check a new LLM run instead, set raw_dir to "data/llm_responses_rerun".
 # -----------------------------------------------------------------------------
 
 library("quanteda")

@@ -1,0 +1,49 @@
+"measure","comparison","Dimension","party_group","r","n"
+"Budgeted expert v budgeted LLM","Green","Economic","Green",0.135,10
+"Budgeted expert v budgeted LLM","Green","Economic","Non-green",0.66,62
+"Budgeted expert v budgeted LLM","Green","Social","Green",0.697,10
+"Budgeted expert v budgeted LLM","Green","Social","Non-green",0.264,62
+"Budgeted expert v budgeted LLM","Green","Environment","Green",-0.049,10
+"Budgeted expert v budgeted LLM","Green","Environment","Non-green",0.757,62
+"Budgeted expert v budgeted LLM","Green","Immigration","Green",0.716,10
+"Budgeted expert v budgeted LLM","Green","Immigration","Non-green",0.78,62
+"Budgeted expert v budgeted LLM","Green","EU","Green",0.254,10
+"Budgeted expert v budgeted LLM","Green","EU","Non-green",0.503,62
+"Budgeted expert v budgeted LLM","Green","Decentralization","Green",0.13,10
+"Budgeted expert v budgeted LLM","Green","Decentralization","Non-green",0.762,62
+"Budgeted expert v budgeted LLM","Far right","Economic","Far right",0.674,11
+"Budgeted expert v budgeted LLM","Far right","Economic","Non-far right",0.67,61
+"Budgeted expert v budgeted LLM","Far right","Social","Far right",0.487,11
+"Budgeted expert v budgeted LLM","Far right","Social","Non-far right",0.231,61
+"Budgeted expert v budgeted LLM","Far right","Environment","Far right",0.011,11
+"Budgeted expert v budgeted LLM","Far right","Environment","Non-far right",0.813,61
+"Budgeted expert v budgeted LLM","Far right","Immigration","Far right",0.815,11
+"Budgeted expert v budgeted LLM","Far right","Immigration","Non-far right",0.678,61
+"Budgeted expert v budgeted LLM","Far right","EU","Far right",0.732,11
+"Budgeted expert v budgeted LLM","Far right","EU","Non-far right",0.398,61
+"Budgeted expert v budgeted LLM","Far right","Decentralization","Far right",0.761,11
+"Budgeted expert v budgeted LLM","Far right","Decentralization","Non-far right",0.578,61
+"Expert importance v unbudgeted LLM","Green","Economic","Green",-0.434,15
+"Expert importance v unbudgeted LLM","Green","Economic","Non-green",0.537,128
+"Expert importance v unbudgeted LLM","Green","Social","Green",-0.155,15
+"Expert importance v unbudgeted LLM","Green","Social","Non-green",0.193,128
+"Expert importance v unbudgeted LLM","Green","Environment","Green",-0.107,16
+"Expert importance v unbudgeted LLM","Green","Environment","Non-green",0.481,153
+"Expert importance v unbudgeted LLM","Green","Immigration","Green",0.514,20
+"Expert importance v unbudgeted LLM","Green","Immigration","Non-green",0.653,152
+"Expert importance v unbudgeted LLM","Green","EU","Green",0.122,19
+"Expert importance v unbudgeted LLM","Green","EU","Non-green",0.299,147
+"Expert importance v unbudgeted LLM","Green","Decentralization","Green",0.214,15
+"Expert importance v unbudgeted LLM","Green","Decentralization","Non-green",0.418,128
+"Expert importance v unbudgeted LLM","Far right","Economic","Far right",0.18,18
+"Expert importance v unbudgeted LLM","Far right","Economic","Non-far right",0.41,125
+"Expert importance v unbudgeted LLM","Far right","Social","Far right",0.366,18
+"Expert importance v unbudgeted LLM","Far right","Social","Non-far right",0.143,125
+"Expert importance v unbudgeted LLM","Far right","Environment","Far right",0.3,23
+"Expert importance v unbudgeted LLM","Far right","Environment","Non-far right",0.526,146
+"Expert importance v unbudgeted LLM","Far right","Immigration","Far right",0.901,25
+"Expert importance v unbudgeted LLM","Far right","Immigration","Non-far right",0.544,147
+"Expert importance v unbudgeted LLM","Far right","EU","Far right",0.387,24
+"Expert importance v unbudgeted LLM","Far right","EU","Non-far right",0.26,142
+"Expert importance v unbudgeted LLM","Far right","Decentralization","Far right",0.399,18
+"Expert importance v unbudgeted LLM","Far right","Decentralization","Non-far right",0.398,125

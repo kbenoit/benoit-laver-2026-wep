@@ -11,8 +11,8 @@
 # at temperature 0 -- will produce results that differ slightly from the
 # archived run.
 #
-# Output is written to llm_output/ (NOT to data/llm_responses/) so that the
-# archived responses are never overwritten:
+# Output is written to data/llm_responses_rerun/ (NOT to data/llm_responses/)
+# so that the archived responses are never overwritten:
 #   interval.rds, ranked.rds, pairwise.rds, budget.rds
 #                      new responses, in the same format as data/llm_responses/
 #   qlm_coded_runs.rds the four quallmer `qlm_coded` objects, which record the
@@ -43,7 +43,7 @@ data_corpus_manifs <- readRDS("data/corpus_manifestos.rds")
 model <- Sys.getenv("SALIENCE_MODEL", "google_gemini/gemini-2.5-pro")
 n_docs <- as.integer(Sys.getenv("SALIENCE_N_DOCS", ndoc(data_corpus_manifs)))
 
-out_dir <- "llm_output"
+out_dir <- file.path("data", "llm_responses_rerun")
 dir.create(out_dir, showWarnings = FALSE)
 
 texts <- setNames(as.character(data_corpus_manifs), docnames(data_corpus_manifs))

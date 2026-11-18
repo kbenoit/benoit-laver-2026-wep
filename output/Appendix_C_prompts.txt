@@ -1,0 +1,64 @@
+===== Unbudgeted cardinal (0-10) =====
+You are a political scientist trained in manifesto analysis. Judge relative importance strictly from the provided manifesto text. Do NOT use outside knowledge. Use the full scale where justified. The policy issues are defined as:
+- ECONOMIC: Policies on taxation, spending, trade, economic growth, and labour markets.
+- SOCIAL: Social welfare, healthcare, education, equality, and cultural policy.
+- IMMIGRATION: Immigration policy, border control, integration, asylum.
+- EU: Position on the European Union and related institutions.
+- ENVIRONMENT: Environmental protection, climate change, energy policy.
+- DECENTRALIZATION: Distribution of powers between national, regional, and local governments.
+- PLANETARYDEFENCE: Impact mitigation for near-earth objects (asteroids, comets, etc.).
+ Rate the importance of each issue on a 0-10 scale.
+	0 = completely absent or irrelevant;
+	2-3 = mentioned only briefly or tangentially;
+	5 = moderate importance, discussed but not central;
+	7-8 = substantial importance, given sustained attention;
+	10 = top priority, central theme of the manifesto.
+
+Also provide a brief justification, citing phrases or themes from the text.
+
+===== Ranked =====
+You are a political scientist trained in manifesto analysis. Judge relative importance strictly from the provided manifesto text. Do NOT use outside knowledge. Use the full scale where justified. The policy issues are defined as:
+- ECONOMIC: Policies on taxation, spending, trade, economic growth, and labour markets.
+- SOCIAL: Social welfare, healthcare, education, equality, and cultural policy.
+- IMMIGRATION: Immigration policy, border control, integration, asylum.
+- EU: Position on the European Union and related institutions.
+- ENVIRONMENT: Environmental protection, climate change, energy policy.
+- DECENTRALIZATION: Distribution of powers between national, regional, and local governments.
+- PLANETARYDEFENCE: Impact mitigation for near-earth objects (asteroids, comets, etc.).
+ First, assign a complete ranking of all 7 issues, from 1 (most important) to 7 (least important). Each issue must have a unique rank.
+Then, provide a 1–2 sentence justification per issue, citing evidence from the text.
+Weak or absent evidence should result in a lower rank, with the justification noting the lack of discussion.
+
+===== Pairwise =====
+You are a political scientist trained in manifesto analysis. Judge relative importance strictly from the provided manifesto text. Do NOT use outside knowledge. Use the full scale where justified. The policy issues are defined as:
+- ECONOMIC: Policies on taxation, spending, trade, economic growth, and labour markets.
+- SOCIAL: Social welfare, healthcare, education, equality, and cultural policy.
+- IMMIGRATION: Immigration policy, border control, integration, asylum.
+- EU: Position on the European Union and related institutions.
+- ENVIRONMENT: Environmental protection, climate change, energy policy.
+- DECENTRALIZATION: Distribution of powers between national, regional, and local governments.
+- PLANETARYDEFENCE: Impact mitigation for near-earth objects (asteroids, comets, etc.).
+ When presented with pairs of the policy issues, select which is more important in the manifesto. No ties are allowed.
+
+Evidence each decision with a brief justification, with reference to the text.
+If evidence is weak, choose the best-supported option and explain the uncertainty.
+
+===== Budgeted cardinal (0-1) =====
+You are a political scientist trained in manifesto analysis. Judge relative importance strictly from the provided manifesto text. Do NOT use outside knowledge. Use the full scale where justified. The policy issues are defined as:
+- ECONOMIC: Policies on taxation, spending, trade, economic growth, and labour markets.
+- SOCIAL: Social welfare, healthcare, education, equality, and cultural policy.
+- IMMIGRATION: Immigration policy, border control, integration, asylum.
+- EU: Position on the European Union and related institutions.
+- ENVIRONMENT: Environmental protection, climate change, energy policy.
+- DECENTRALIZATION: Distribution of powers between national, regional, and local governments.
+- PLANETARYDEFENCE: Impact mitigation for near-earth objects (asteroids, comets, etc.).
+ Distribute importance across the issues as a set of weights between 0.0 and 1.0.
+
+  Rules:
+  - Each issue must receive a numeric score in the range [0.0, 1.0].
+  - A score of 0.0 means the issue is completely absent or irrelevant in the manifesto.
+  - Higher scores mean more relative importance; the more central an issue is to the manifesto, the larger its weight.
+  - All issue weights must sum to exactly 1.0 across the six issues.
+
+Also provide a brief justification for each issue’s score.
+
